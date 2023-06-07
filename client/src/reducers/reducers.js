@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux'
 import authReducer from './auth'
-import quizReducer from './quiz'
+import questReducer from './quest'
 import gameReducer from './game'
+import studentScoreReducer from './studentScore'
 export default combineReducers({
   authReducer,
-  quizReducer,
+  questReducer,
   gameReducer,
+  studentScoreReducer,
 })

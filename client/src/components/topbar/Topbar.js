@@ -1,5 +1,5 @@
-import React, { useContext } from 'react'
-import { Grid, Box, useTheme, IconButton, InputBase } from '@mui/material'
+import React, {useContext, useState} from 'react'
+import {Grid, Box, useTheme, IconButton, InputBase, Typography} from '@mui/material'
 import { ColorSwitchMode, tokens } from '../../theme/theme'
 import LightModeIcon from '@mui/icons-material/LightMode'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
@@ -13,6 +13,15 @@ function Topbar() {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const classes = useStyles()
+    const time = new Date().toLocaleTimeString();
+  const [currentTime, setCurrentTime] = useState(time);
+
+  const updateTime = () => {
+      const time = new Date().toLocaleTimeString();
+      setCurrentTime(time)
+  }
+
+  setInterval(updateTime, 1000)
 
   return (
     <Box
@@ -21,7 +30,7 @@ function Topbar() {
       alignItems="center"
       px="32px"
       py="24px">
-      <Grid>Welcome {user.result.lastName}</Grid>
+      <Grid>It`s a pleasure to see you here, {user.result.lastName}</Grid>
       <Box display="flex">
         <Grid
           onClick={colorMode.toggleColorMode}
@@ -33,21 +42,19 @@ function Topbar() {
               <LightModeIcon />
             )}
           </IconButton>
-          <IconButton>
-            <NotificationsNoneIcon />
-          </IconButton>
         </Grid>
+
         <Grid
           sx={{
             display: 'flex',
             backgroundColor: `${colors.primary[600]}`,
             borderRadius: '8px',
             ml: '28px',
+              padding: '10px'
           }}>
-          <IconButton className={classes.root}>
-            <SearchIcon />
-          </IconButton>
-          <InputBase sx={{ px: '18px', py: '12px' }} placeholder="Search" />
+            <Typography variant="h6" >
+                {currentTime}
+            </Typography>
         </Grid>
       </Box>
     </Box>

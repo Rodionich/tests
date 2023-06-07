@@ -14,11 +14,11 @@ import CheckBoxTwoToneIcon from '@mui/icons-material/CheckBoxTwoTone'
 import { useStyles } from './styles'
 
 function QuestionSettings({
-  isQuizOptionsVisible,
+  isQuestOptionsVisible,
   questionData,
   handleQuestionChange,
   correctAmount,
-  showQuizOptions,
+  showQuestOptions,
   handleQuestionSubmit,
   questionType,
   setQuestionType,
@@ -31,9 +31,6 @@ function QuestionSettings({
   setIsPickCorrectAnswers,
 }) {
   const classes = useStyles()
-
-  // console.log('amountOut')
-  // console.log(answerAmount)
 
   const changeQuestionType = e => {
     setQuestionType(e.target.value)
@@ -91,12 +88,12 @@ function QuestionSettings({
       container
       spacing={2}
       style={{
-        display: isQuizOptionsVisible ? 'none' : 'flex',
+        display: isQuestOptionsVisible ? 'none' : 'flex',
       }}>
       <Grid item xs={5}>
         <Box>
           <Typography variant="h4" sx={{ marginBottom: '15px' }}>
-            Question Type
+            Quest Type
           </Typography>
           <FormControl fullWidth>
             <Select
@@ -200,7 +197,7 @@ function QuestionSettings({
           justifyContent: 'flex-end',
         }}>
         <Box>
-          <IconButton onClick={showQuizOptions}>
+          <IconButton onClick={showQuestOptions}>
             <SettingsTwoToneIcon />
           </IconButton>
         </Box>

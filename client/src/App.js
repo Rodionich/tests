@@ -7,15 +7,17 @@ import { ColorSwitchMode, useMode } from './theme/theme'
 import { CssBaseline, ThemeProvider } from '@mui/material'
 import Layout from './components/layout/Layout'
 import About from './pages/About'
-import PublicQuizes from './pages/PublicQuizes'
+import PublicQuests from './pages/PublicQuests'
 import Contacts from './pages/Contacts'
-import MyQuizes from './pages/MyQuizes'
-import QuizCreator from './pages/QuizCreate'
+import MyQuests from './pages/MyQuests'
+import QuestCreator from './pages/QuestCreate'
 import Play from './pages/Play'
 import socketIO from 'socket.io-client'
 import { useDispatch } from 'react-redux'
 import { createWebSocket } from './actions/game'
 import TeacherScreen from './components/game/TeacherScreen'
+import StudentScreen from './components/game/StudentScreen'
+import QuestProfile from './pages/QuestProfile'
 function App() {
   const [theme, colorMode] = useMode('dark')
   const dispatch = useDispatch()
@@ -36,12 +38,18 @@ function App() {
               <Route element={<PrivateRoute />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/play" element={<Play />} />
-                <Route path="/myQuizes" element={<MyQuizes />} />
-                <Route path="/myQuizes/:userName" element={<QuizCreator />} />
-                <Route path="/publicQuizes" element={<PublicQuizes />} />
+                <Route path="/myQuests" element={<MyQuests />} />
+                <Route path="/myQuests/:userId" element={<QuestCreator />} />
+                <Route path="/publicQuests" element={<PublicQuests />} />
+                <Route path="/publicQuests/search" element={<PublicQuests />} />
+                <Route
+                  path="/publicQuests/:questId"
+                  element={<QuestProfile />}
+                />
                 <Route path="/contacts" element={<Contacts />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/play/teacher/:id" element={<TeacherScreen />} />
+                <Route path="/play/student/:id" element={<StudentScreen />} />
               </Route>
               <Route path="/auth" element={<Auth />} />
             </Route>

@@ -34,7 +34,9 @@ function Sidebar(props) {
     setUser(null)
   }
 
-  const renderMenu = menu.map(element => {
+  const currentMenu = user.result.userType === 'Teacher' ? menu : menu.filter((f)=> f.id !== 3 );
+
+  const renderMenu = currentMenu.map(element => {
     return (
       <ListItem key={element.id}>
         <ListItemButton
@@ -82,7 +84,7 @@ function Sidebar(props) {
                     className={classes.logoImage}
                   />
                   <Typography variant="h1" className={classes.brandTitle}>
-                    Quiz
+                    Quest
                   </Typography>
                 </Box>
                 {!isNonMobile && (

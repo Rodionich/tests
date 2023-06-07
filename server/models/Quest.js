@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 
-const quizSchema = new mongoose.Schema({
+const questSchema = new mongoose.Schema({
   title: { type: String, required: true, unique: true },
   description: { type: String },
+  keywords: { type: String },
   backgroundImage: { type: String },
   creatorId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -22,7 +23,7 @@ const quizSchema = new mongoose.Schema({
     {
       questionType: {
         type: String,
-        enum: ["True/False", "Quiz"],
+        enum: ["True/False", "Quiz", "OpenQuestion"],
         required: true,
       },
       pointType: {
@@ -42,8 +43,8 @@ const quizSchema = new mongoose.Schema({
       },
       answerList: [
         {
-          name: { type: String },
-          body: { type: String },
+          answerNumber: { type: String },
+          answer: { type: String },
           isCorrect: { type: Boolean },
         },
       ],
@@ -51,6 +52,8 @@ const quizSchema = new mongoose.Schema({
     },
   ],
   dateCreated: { type: Date, default: new Date() },
+  likes: { type: [String], default: [] },
+  comments: { type: [String], default: [] },
 });
 
-module.exports = mongoose.model("Quiz", quizSchema);
+module.exports = mongoose.model("Quest", questSchema);

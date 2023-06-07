@@ -7,18 +7,17 @@ import QuestionsList from './QuestionsList'
 function QuestionDisplay({
   isQuestionDataSave,
   setQuestionData,
-  quizData,
-  setQuizData,
+  questData,
+  setQuestData,
   setIsQuestionDataSave,
-  setIsQuizOptionsVisible,
+  setIsQuestOptionsVisible,
 }) {
   const classes = useStyles()
 
   const addNewQuestion = () => {
-    console.log(quizData)
     resetQuestionData()
     setIsQuestionDataSave(false)
-    setIsQuizOptionsVisible(false)
+    setIsQuestOptionsVisible(false)
   }
 
   const resetQuestionData = () => {
@@ -34,19 +33,19 @@ function QuestionDisplay({
         { answerNumber: '3', answer: '', isCorrect: false },
         { answerNumber: '4', answer: '', isCorrect: false },
       ],
-      questionNumber: quizData.questionList.length + 1,
+      questionNumber: questData.questionList.length + 1,
     })
   }
 
   const pickQuestion = questionNumber => {
-    const question = quizData.questionList.find(
+    const question = questData.questionList.find(
       question => question.questionNumber === questionNumber,
     )
     setQuestionData(question)
   }
 
   const deleteQuestion = questionNumber => {
-    setQuizData(prevState => ({
+    setQuestData(prevState => ({
       ...prevState,
       questionList: [
         ...prevState.questionList.slice(0, questionNumber - 1),
@@ -56,15 +55,15 @@ function QuestionDisplay({
         ),
       ],
     }))
-    quizData.questionList.forEach(question => {
+    questData.questionList.forEach(question => {
       if (question.questionNumber > questionNumber) {
         question.questionNumber -= 1
       }
     })
 
-    if (quizData.questionList.length > 1 && questionNumber > 1) {
+    if (questData.questionList.length > 1 && questionNumber > 1) {
       pickQuestion(questionNumber - 1)
-    } else if (quizData.questionList.length > 1 && questionNumber === 1) {
+    } else if (questData.questionList.length > 1 && questionNumber === 1) {
       pickQuestion(1)
     } else {
       resetQuestionData()
@@ -72,7 +71,14 @@ function QuestionDisplay({
   }
 
   return (
-    <Grid item xs={4} className={classes.displayQuestion} spacing={2}>
+    <Grid
+      container
+      gap={2}
+      xs={4}
+      className={classes.displayQuestion}
+      sx={{
+        alignContent: 'flex-start',
+      }}>
       <Grid
         item
         xs={12}
@@ -91,8 +97,8 @@ function QuestionDisplay({
         </IconButton>
       </Grid>
 
-      {quizData.questionList.length > 0 &&
-        quizData.questionList.map(question => (
+      {questData.questionList.length > 0 &&
+        questData.questionList.map(question => (
           <QuestionsList
             key={question.questionNumber}
             onClick={() => pickQuestion(question.questionNumber)}

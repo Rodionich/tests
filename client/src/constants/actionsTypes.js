@@ -1,13 +1,28 @@
 export const AUTH = 'AUTH'
 export const LOGOUT = 'LOGOUT'
 
-export const CREATE_QUIZ = 'CREATE_QUIZ'
-export const GET_QUIZ = 'FETCH_QUIZ'
-export const UPDATE_QUIZ = 'UPDATE_QUIZ'
+export const CREATE_QUEST = 'CREATE_QUEST'
+export const GET_QUEST = 'GET_QUEST'
+export const UPDATE_QUEST = 'UPDATE_QUEST'
+export const REMOVE_QUEST = 'REMOVE_QUEST'
+export const GET_PUBLIC_QUESTS = 'GET_PUBLIC_QUESTS'
+export const GET_TASKS = 'GET_TASKS'
+export const ADD_TASK = 'ADD_TASK'
+export const UPDATE_TASK = 'UPDATE_TASK'
+export const REMOVE_TASK = 'REMOVE_TASK'
+export const LIKE_QUEST = 'LIKE_QUEST'
+export const COMMENT_QUEST = 'COMMENT_QUEST'
+export const SEARCH_QUESTS = 'SEARCH_QUESTS'
 
-export const GET_PERSONAL_QUIZES = 'GET_PERSONAL_QUIZES'
+export const START_LOADING = 'START_LOADING'
+
+export const END_LOADING = 'END_LOADING'
+
+export const GET_PERSONAL_QUESTS = 'GET_PERSONAL_QUESTS'
 
 export const CREATE_WEBSOCKET = 'CREATE_WEBSOCKET'
-export const ACTIVATE_GAME = 'CREATE_GAME'
+export const ACTIVATE_GAME = 'ACTIVATE_GAME'
 
 export const ADD_STUDENT = 'ADD_STUDENT'
+
+export const SAVE_STUDENT_SCORE = 'SAVE_STUDENT_SCORE'

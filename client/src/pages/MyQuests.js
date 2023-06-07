@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   FormControl,
   FormControlLabel,
   Grid,
@@ -12,39 +11,41 @@ import {
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { createQuiz, getPersonalQuizes } from '../actions/quiz'
-import QuizList from '../components/myquizes/QuizList'
-import { useStyles } from '../components/myquizes/styles'
+import { createQuest, getPersonalQuests } from '../actions/quest'
+import QuestList from '../components/myQuests/QuestList'
+import { useStyles } from '../components/myQuests/styles'
 import Carousel from 'react-material-ui-carousel'
+import { StyledButton } from '../components/auth/styles'
 
-function MyQuizes() {
+function MyQuests() {
   const user = JSON.parse(localStorage.getItem('profile'))
   const dispatch = useDispatch()
   const history = useNavigate()
   const classes = useStyles()
-  const [quizData, setQuizData] = useState({
+  const [questData, setQuestData] = useState({
     title: '',
     creatorName: `${user?.result.userName}`,
     creatorId: `${user?.result._id}`,
     backgroundImage: '',
     description: '',
+    keywords: '',
     pointsPerQuestion: 1,
     isPublic: 'false',
     questionList: [],
   })
 
+  console.log('isPublic', questData.isPublic)
   useEffect(() => {
-    dispatch(getPersonalQuizes(user.result._id))
+    dispatch(getPersonalQuests(user.result._id))
   }, [])
 
-  const quizes = useSelector(state => state.quizReducer.quizes)
+  const quests = useSelector(state => state.questReducer.quests)
   const handleSubmit = () => {
-    // dispatch(createQuiz(quizData, history))
-    history(`/myQuizes/${quizData.creatorName}`, { replace: true })
+    dispatch(createQuest(questData, history))
   }
 
   const handleChange = e => {
-    setQuizData({ ...quizData, [e.target.name]: e.target.value })
+    setQuestData({ ...questData, [e.target.name]: e.target.value })
   }
 
   function chunk(arr, size) {
@@ -57,42 +58,58 @@ function MyQuizes() {
     return result
   }
 
-  const quizzesGroup = chunk(quizes, 3)
+  const questsGroup = chunk(quests, 3)
 
   return (
     <Box className={classes.root}>
       <Grid container spacing={5}>
         <Grid item xs={4}>
           <Typography sx={{ marginBottom: '10px' }} variant="h3">
-            Create new quiz
+            Create new quest
           </Typography>
-          <Box className={classes.quizSettings}>
+          <Box className={classes.questSettings}>
             <Box sx={{ marginBottom: '10px' }}>
-              <Typography variant="h5">Title</Typography>
+              <Typography variant="h5" sx={{ marginBottom: '10px' }}>
+                Title
+              </Typography>
               <TextField
-                width="100%"
+                fullWidth
                 name="title"
                 onChange={handleChange}></TextField>
             </Box>
             <Box sx={{ marginBottom: '10px' }}>
-              <Typography variant="h5">Description</Typography>
-              <TextField name="description" onChange={handleChange}></TextField>
+              <Typography variant="h5" sx={{ marginBottom: '10px' }}>
+                Description
+              </Typography>
+              <TextField
+                fullWidth
+                name="description"
+                onChange={handleChange}></TextField>
+            </Box>
+            <Box sx={{ marginBottom: '10px' }}>
+              <Typography variant="h5" sx={{ marginBottom: '10px' }}>
+                Keywords
+              </Typography>
+              <TextField
+                fullWidth
+                name="keywords"
+                onChange={handleChange}></TextField>
             </Box>
             <Box sx={{ marginBottom: '10px' }}>
               <FormControl>
                 <Typography variant="h5">Access</Typography>
                 <RadioGroup
                   aria-labelledby="demo-radio-buttons-group-label"
-                  value={quizData.isPublic}
+                  value={questData.isPublic}
                   name="isPublic"
                   onChange={handleChange}>
                   <FormControlLabel
-                    value="false"
+                    value="true"
                     control={<Radio />}
                     label="Public"
                   />
                   <FormControlLabel
-                    value="true"
+                    value="false"
                     control={<Radio />}
                     label="Private"
                   />
@@ -100,18 +117,21 @@ function MyQuizes() {
               </FormControl>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button onClick={handleSubmit}>Create</Button>
+              <StyledButton onClick={handleSubmit}>Create</StyledButton>
             </Box>
           </Box>
         </Grid>
         <Grid item xs={8}>
           <Typography sx={{ marginBottom: '10px' }} variant="h3">
-            My quizzes
+            My quests
           </Typography>
-          <Box className={classes.quizSettings}>
-            <Carousel>
-              {quizzesGroup.map((quizzesList, index) => (
-                <QuizList key={index} quizzesList={quizzesList} />
+          <Box className={classes.questSettings}>
+            <Carousel
+              navButtonsAlwaysInvisible={true}
+              interval={'10000'}
+              duration={'800'}>
+              {questsGroup.map((questsList, index) => (
+                <QuestList key={index} questsList={questsList} />
               ))}
             </Carousel>
           </Box>
@@ -121,4 +141,4 @@ function MyQuizes() {
   )
 }
 
-export default MyQuizes
+export default MyQuests

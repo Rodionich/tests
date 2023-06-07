@@ -33,7 +33,6 @@ function AddQuestion({
     })
   }
   const updateCorrectAnswer = index => {
-    console.log('!!!!!!!!!!!!!!!!!!!!!!!')
     if (isPickCorrectAnswers.answersIndexes.indexOf(index) !== -1) {
       setIsPickCorrectAnswers(prevState => ({
         answersIndexes: prevState.answersIndexes.filter(
@@ -71,16 +70,6 @@ function AddQuestion({
   }
 
   useEffect(() => {
-    console.log('amountCorrect')
-    console.log(correctAmount)
-    console.log('length')
-    console.log(isPickCorrectAnswers)
-    console.log(isPickCorrectAnswers.answersIndexes.length)
-
-    console.log(
-      'if',
-      isPickCorrectAnswers.answersIndexes.length >= Number(correctAmount),
-    )
     isPickCorrectAnswers.answersIndexes.length >= correctAmount
       ? setIsPickCorrectAnswers({ ...isPickCorrectAnswers, isPick: true })
       : setIsPickCorrectAnswers({ ...isPickCorrectAnswers, isPick: false })

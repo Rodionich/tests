@@ -113,16 +113,25 @@ export const StyledForm = styled('form')`
 `
 
 export const StyledInput = styled(TextField)`
-  background-color: #e0dede;
-  border: none;
+  border: 5px solid #441957;
   outline: none;
   border-radius: 7px;
-  border-bottom: 2px solid #20103f;
-  margin: 0.5rem 0;
+  margin: 6px 0;
   width: 100%;
+  input {
+    color: #000;
+  }
+  p {
+    position: absolute;
+    top: -25px;
+    left: -15px;
+  }
+  &:hover {
+    box-shadow: 6px 2px 2px #20103f;
+  }
   &:focus {
     outline: none;
-    border: 2px solid #20103f;
+    // border: 2px solid #20103f;
   }
 `
 
@@ -173,14 +182,7 @@ export const StyledButton = styled(Button)`
 
 export const Title = styled('h1')`
   font-size: 4rem;
-  margin-bottom: 2rem;
-`
-
-export const Link = styled('a')`
-  text-decoration: none;
-  color: #333;
-  font-size: 1.4rem;
-  margin: 1rem 0;
+  margin-bottom: 1rem;
 `
 
 export const ButtonAnimate = styled(Button)`

@@ -16,17 +16,22 @@ import { useStyles } from './styles'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { activateGame } from '../../actions/game'
+import { removeQuest } from '../../actions/quest'
 
-function Quiz({ key, quiz }) {
+function Quest({ key, quest }) {
   const classes = useStyles()
   const history = useNavigate()
   const dispatch = useDispatch()
 
   const socket = useSelector(state => state.gameReducer.socket)
+
+  const openQuestCreator = e => {
+    history(`/myQuests/${quest._id}`)
+  }
   const startGame = async () => {
     let gameData = {
-      quizId: quiz._id,
-      teacherId: quiz.teacherId,
+      questId: quest._id,
+      teacherId: quest.teacherId,
       isLive: true,
       pin: String(Math.floor(Math.random() * 900000) + 100000),
     }
@@ -40,7 +45,7 @@ function Quiz({ key, quiz }) {
         <Grid item xs={4}>
           <CardMedia
             component="img"
-            image={quiz.backgroundImage}
+            image={quest.backgroundImage}
             height="225"
           />
         </Grid>
@@ -50,24 +55,24 @@ function Quiz({ key, quiz }) {
               <IconButton onClick={startGame}>
                 <PlayCircleOutlineTwoToneIcon />
               </IconButton>
-              <IconButton>
+              <IconButton onClick={() => dispatch(removeQuest(quest._id))}>
                 <DeleteOutlineTwoToneIcon />
               </IconButton>
-              <IconButton>
+              <IconButton onClick={openQuestCreator}>
                 <MoreVertTwoToneIcon />
               </IconButton>
             </CardActions>
           </Box>
           <CardContent>
-            <Typography variant="h4">{quiz.title}</Typography>
+            <Typography variant="h4">{quest.title}</Typography>
             <Typography variant="subtitle1" color="text.secondary">
-              {quiz.creatorName}
+              {quest.creatorName}
             </Typography>
             <Typography variant="subtitle1" color="text.secondary">
-              {quiz.description}
+              {quest.description}
             </Typography>
             <Typography variant="subtitle1" color="text.secondary">
-              Сontains {quiz.numberOfQuestions} questions
+              Сontains {quest.numberOfQuestions} questions
             </Typography>
           </CardContent>
         </Grid>
@@ -76,4 +81,4 @@ function Quiz({ key, quiz }) {
   )
 }
 
-export default Quiz
+export default Quest

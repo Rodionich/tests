@@ -6,7 +6,6 @@ import './style.css'
 import {
   Text,
   Title,
-  Link,
   StyledButton,
   ButtonAnimate,
   RectangleMain,
@@ -32,22 +31,23 @@ function Auth() {
   const [errors, setErrors] = useState({})
   const history = useNavigate()
   const dispatch = useDispatch()
-  const error = null
 
   const handleSubmit = e => {
     e.preventDefault()
-    if (validate()) {
-      if (isSignup) {
-        dispatch(register(formData, history))
-      } else {
-        dispatch(login(formData, history))
-      }
+    if (isSignup) {
+      dispatch(register(formData, history))
+    } else {
+      dispatch(login(formData, history))
     }
   }
 
   const handleChange = e => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
+    const name =
+      e.target.name === 'password2' || e.target.name === 'email2'
+        ? e.target.name.slice(0, -1)
+        : e.target.name
     validate({ [e.target.name]: e.target.value })
+    setFormData({ ...formData, [name]: e.target.value })
   }
 
   const switchMode = () => {
@@ -60,20 +60,47 @@ function Auth() {
     switchMode()
   }
 
-  const resetForm = () => {
-    setFormData(initialState)
-    setErrors({})
-  }
   const validate = (formValues = formData) => {
-    let temp = { ...errors }
+    const temp = { ...errors }
+
+    if (formValues.email === '') {
+      delete temp.email
+      return setErrors({ ...temp })
+    }
+
+    if (formValues.password === '') {
+      delete temp.password
+      return setErrors({ ...temp })
+    }
+
     if ('email' in formValues)
       temp.email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formValues.email)
         ? ''
         : 'Email is not valid.'
+    if ('email2' in formValues)
+      temp.email2 = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formValues.email)
+        ? ''
+        : 'Email is not valid.'
     if ('password' in formValues)
-      temp.password =
-        formValues.password.length > 3 ? '' : 'Password is not valid.'
-
+      temp.password = formValues.password.length > 7 ? '' : 'Length > 7'
+    if ('password2' in formValues)
+      temp.password2 = formValues.password2.length > 7 ? '' : 'Length > 7'
+    if ('firstName' in formValues)
+      temp.firstName = formValues.firstName.length > 3 ? '' : 'Length > 3'
+    if ('lastName' in formValues)
+      temp.lastName = formValues.lastName.length > 3 ? '' : 'Length > 3'
+    if ('userType' in formValues)
+      temp.userType =
+        formValues.userType === 'Student' || formValues.userType === 'Teacher'
+          ? ''
+          : 'Student or Teacher'
+    if ('userName' in formValues)
+      temp.userName = formValues.userName.length > 7 ? '' : 'Length > 7'
+    if ('confirmedPassword' in formValues)
+      temp.confirmedPassword =
+        formValues.confirmedPassword === formData.password
+          ? ''
+          : 'Passwords dont match'
     setErrors({
       ...temp,
     })
@@ -83,13 +110,9 @@ function Auth() {
 
   return (
     <>
-      {' '}
       <RectangleMain clicked={click}>
         <ButtonAnimate clicked={click} onClick={handleClick}></ButtonAnimate>
-        <StyledForm
-          onSubmit={handleSubmit}
-          // sx={{ marginRight: '150px' }}
-          className="login">
+        <StyledForm onSubmit={handleSubmit} className="login">
           <Title>Sign In</Title>
           <StyledInput
             name="email"
@@ -100,6 +123,7 @@ function Auth() {
           />
           <StyledInput
             name="password"
+            type="password"
             id="passwordIdLog"
             placeholder="Password"
             onChange={handleChange}
@@ -108,9 +132,7 @@ function Auth() {
               helperText: errors.password,
             })}
           />
-          {/*<Link href="#">Forgot Your Password?</Link>*/}
           <StyledButton type="submit">Sign In</StyledButton>
-          <StyledButton onClick={resetForm}>Reset</StyledButton>
         </StyledForm>
 
         <StyledForm
@@ -124,6 +146,10 @@ function Auth() {
             id="firstNameId"
             placeholder="First Name"
             onChange={handleChange}
+            {...(errors.firstName && {
+              error: true,
+              helperText: errors.firstName,
+            })}
           />
 
           <StyledInput
@@ -132,6 +158,10 @@ function Auth() {
             id="lastNameId"
             placeholder="Last Name"
             onChange={handleChange}
+            {...(errors.lastName && {
+              error: true,
+              helperText: errors.lastName,
+            })}
           />
 
           <StyledInput
@@ -140,6 +170,10 @@ function Auth() {
             id="userTypedId"
             placeholder="User type"
             onChange={handleChange}
+            {...(errors.userType && {
+              error: true,
+              helperText: errors.userType,
+            })}
           />
 
           <StyledInput
@@ -148,21 +182,34 @@ function Auth() {
             id="userNameId"
             placeholder="User Name"
             onChange={handleChange}
+            {...(errors.userName && {
+              error: true,
+              helperText: errors.userName,
+            })}
           />
 
           <StyledInput
             type="email"
-            name="email"
+            name="email2"
             id="emailIdReg"
             placeholder="Email address"
             onChange={handleChange}
+            {...(errors.email2 && {
+              error: true,
+              helperText: errors.email2,
+            })}
           />
 
           <StyledInput
-            name="password"
+            name="password2"
+            type="password"
             id="passwordIdReg"
             placeholder="Password"
             onChange={handleChange}
+            {...(errors.password2 && {
+              error: true,
+              helperText: errors.password2,
+            })}
           />
 
           <StyledInput
@@ -171,11 +218,12 @@ function Auth() {
             id="confirmedPasswordId"
             placeholder="Repeat password"
             onChange={handleChange}
+            {...(errors.confirmedPassword && {
+              error: true,
+              helperText: errors.confirmedPassword,
+            })}
           />
 
-          <Link href="#" onClick={handleClick}>
-            Already have an Account?
-          </Link>
           <StyledButton type="submit">Sign Up</StyledButton>
         </StyledForm>
 

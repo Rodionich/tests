@@ -11,7 +11,16 @@ function AnswersList({
   updateCorrectAnswer,
   isPickCorrectAnswers,
 }) {
-  console.log(isPickCorrectAnswers.isPick)
+  const colors = [
+    '#2d70ae',
+    '#204f7b',
+    '#2d9da6',
+    '#1f6e74',
+    '#efa929',
+    '#c9870f',
+    '#d5546d',
+    '#bb2e49',
+  ]
   return (
     <>
       <Grid
@@ -21,6 +30,11 @@ function AnswersList({
         }>
         <Box>
           <TextField
+            sx={{
+              backgroundColor: colors[answerNumber * 2],
+              borderRadius: '10px',
+              borderBottom: `7px solid ${colors[answerNumber * 2 + 1]}`,
+            }}
             fullWidth
             value={answer.answer}
             name="answer"

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import WaitingRoom from './WaitingRoom'
 import Task from './Task'
-import { Box, Typography } from '@mui/material'
+import { Box, Grid, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { getQuiz } from '../../actions/quiz'
+import { getQuest } from '../../actions/quest'
+import { useStyles } from './styles'
+import { StyledButton } from '../auth/styles'
 
 function TeacherScreen() {
   const socket = useSelector(state => state.gameReducer.socket)
@@ -13,59 +15,140 @@ function TeacherScreen() {
   )
   const { id } = useParams()
   const dispatch = useDispatch()
-  const quiz = useSelector(state => state.quizReducer.quiz)
+  const quest = useSelector(state => state.questReducer.quest)
   const [isQuestActivated, setIsQuestActivated] = useState(false)
   const [timeToStart, setTimeToStart] = useState(3)
   const [isDisplayTimer, setIsDisplayTimer] = useState(false)
   const [isDisplayTask, setIsDisplayTask] = useState(false)
+  const [taskNumber, setTaskNumber] = useState(0)
+  const classes = useStyles()
+
+  const [taskData, setTaskData] = useState({
+    questionType: 'Quiz',
+    pointType: 'Standard',
+    answerTime: 5,
+    backgroundImage: '',
+    question: '',
+    answerList: [
+      { answerNumber: '1', answer: '', isCorrect: false },
+      { answerNumber: '2', answer: '', isCorrect: false },
+      { answerNumber: '3', answer: '', isCorrect: false },
+      { answerNumber: '4', answer: '', isCorrect: false },
+    ],
+    questionNumber: 1,
+  })
+
+  useEffect(() => {
+    if (game) {
+      console.log(game)
+      dispatch(getQuest(game._id))
+    }
+  }, [dispatch, game])
 
   const activateQuest = () => {
+    socket.emit('start-game', quest)
+    socket.emit('question-preview', () => {
+      startTimer(3, taskNumber)
+    })
     setIsQuestActivated(!isQuestActivated)
-    startTimer(3, 1)
     setIsDisplayTimer(true)
   }
 
-  const startTimer = (timeToStart, index) => {
+  const startTimer = (timeToStart, number) => {
     setIsDisplayTimer(true)
     let timer = timeToStart
     let interval = setInterval(() => {
       setTimeToStart(timer)
-      if (timer === 1) {
+      if (timer === 0) {
         clearInterval(interval)
+        displayTask(number)
         setIsDisplayTimer(false)
-        setIsDisplayTask()
+        setIsDisplayTask(true)
       }
       timer--
     }, 1000)
   }
 
+  const startTaskTimer = (timeToStart, number) => {
+    let timer = timeToStart
+    let interval = setInterval(() => {
+      setTimeToStart(timer)
+      if (timer === 0) {
+        clearInterval(interval)
+        displayTask(number)
+      }
+      timer--
+    }, 1000)
+  }
+
+  const displayTask = number => {
+    if (number === quest.questionList.length) {
+      console.log('end')
+    } else {
+      setTaskData(quest.questionList[number])
+      setTaskNumber(taskNumber + 1)
+      let time = quest.questionList[number].answerTime
+      let question = {
+        answerList: quest.questionList[number].answerList,
+        questionNumber: quest.questionList[number].questionIndex,
+        correctAnswersCount: quest.questionList[number].answerList.filter(
+          answer => answer.isCorrect === true,
+        ).length,
+      }
+      socket.emit('start-question-timer', time, question, () => {
+        startTaskTimer(time, number + 1)
+      })
+    }
+  }
+
   return (
     <>
-      <Box>
+      <Box className={classes.root}>
         {!isQuestActivated && (
-          <div>
+          <Grid container spacing={5}>
             <WaitingRoom pin={game?.pin} socket={socket} />
-            <button onClick={activateQuest}>Activate quest</button>
-          </div>
+            <Grid
+              item
+              xs={12}
+              container
+              sx={{
+                marginBottom: '15px',
+                display: 'flex',
+                justifyContent: 'center',
+              }}>
+              <StyledButton onClick={activateQuest}>
+                Activate quest
+              </StyledButton>
+            </Grid>
+          </Grid>
         )}
       </Box>
-      <Box>
+      <Grid
+        container
+        direction="column"
+        sx={{ justifyContent: 'center', alignItems: 'center' }}>
         {isDisplayTimer && (
-          <Typography sx={{ marginBottom: '10px' }} variant="h3">
-            {timeToStart}
-          </Typography>
+          <Box
+            sx={{
+              minHeight: 'calc(100vh - 300px)',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Typography variant="h1">{timeToStart}</Typography>
+          </Box>
+        )}
+      </Grid>
+      <Box className={classes.root}>
+        {isDisplayTask && (
+          <Task
+            key={taskData.questionNumber}
+            task={taskData}
+            timeToStart={timeToStart}
+            teacher
+          />
         )}
       </Box>
-      {isDisplayTask && (
-        <div>
-          <Task
-            teacher
-            key={questionData.questionIndex}
-            question={questionData}
-            timer={timer}
-          />
-        </div>
-      )}
     </>
   )
 }

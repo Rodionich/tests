@@ -1,19 +1,19 @@
 import { Box, Grid } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getQuiz, updateQuiz } from '../actions/quiz'
-import { useNavigate } from 'react-router-dom'
-import { useStyles } from '../components/quizCreate/styles'
-import QuestionSettings from '../components/quizCreate/QuestionSettings'
-import QuizSettings from '../components/quizCreate/QuizSettings'
-import AddQuestion from '../components/quizCreate/AddQuestion'
-import QuestionDisplay from '../components/quizCreate/QuestionDisplay'
+import { getQuest, updateQuest } from '../actions/quest'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useStyles } from '../components/questCreate/styles'
+import QuestionSettings from '../components/questCreate/QuestionSettings'
+import QuestSettings from '../components/questCreate/QuestSettings'
+import AddQuestion from '../components/questCreate/AddQuestion'
+import QuestionDisplay from '../components/questCreate/QuestionDisplay'
 
-function QuizCreator() {
+function QuestCreator() {
   const dispatch = useDispatch()
   const user = JSON.parse(localStorage.getItem('profile'))
   const history = useNavigate()
-  const [isQuizOptionsVisible, setIsQuizOptionsVisible] = useState(false)
+  const [isQuestOptionsVisible, setIsQuestOptionsVisible] = useState(false)
   const [isQuestionDataSave, setIsQuestionDataSave] = useState(false)
   const [questionType, setQuestionType] = useState('Quiz')
   const [correctAmount, setCorrectAmount] = useState(1)
@@ -39,39 +39,45 @@ function QuizCreator() {
   }
   const [questionData, setQuestionData] = useState(questionStructure)
 
-  const [quizData, setQuizData] = useState({
+  const [questData, setQuestData] = useState({
     title: '',
     creatorName: `${user?.result.firstName} ${user?.result.lastName}`,
     backgroundImage: '',
     description: '',
+    keywords: '',
     pointsPerQuestion: 1,
     numberOfQuestions: 0,
     isPublic: true,
     questionList: [],
   })
 
-  const userId = useSelector(
-    state => state.quizReducer.quizes[state.quizReducer.quizes.length - 1]?._id,
-  )
+  // const userId = useSelector(
+  //   state =>
+  //     state.questReducer.quests[state.questReducer.quests.length - 1]._id,
+  // )
+  const { userId } = useParams()
 
-  // useEffect(() => {
-  //   dispatch(getQuiz(userId))
-  // }, [userId, dispatch])
+  const quest = useSelector(state => state.questReducer.quest)
 
-  const quiz = useSelector(state => state.quizReducer.quiz)
+  useEffect(() => {
+    dispatch(getQuest(userId))
+  }, [userId, dispatch])
 
-  // useEffect(() => {
-  //   if (quiz) {
-  //     setQuizData(quiz)
-  //   }
-  // }, [quiz])
+  useEffect(() => {
+    if (quest) {
+      setQuestData(quest)
+    }
+  }, [quest])
 
-  const showQuizOptions = () => {
-    setIsQuizOptionsVisible(!isQuizOptionsVisible)
+  console.log(quest)
+
+  const showQuestOptions = () => {
+    setIsQuestOptionsVisible(!isQuestOptionsVisible)
   }
 
   const verifyAnswers = () => {
-    return questionData.answerList.every(answerData => answerData.answer !== '')
+    // return questionData.answerList.every(answerData => answerData.answer !== '' if )
+    return true
   }
 
   const verifyQuestion = () => {
@@ -92,11 +98,11 @@ function QuizCreator() {
       setIsQuestionDataSave(true)
 
       if (
-        quizData.questionList.find(
+        questData.questionList.find(
           question => question.questionNumber === questionData.questionNumber,
         )
       ) {
-        setQuizData(prevState => ({
+        setQuestData(prevState => ({
           ...prevState,
           questionList: [
             ...prevState.questionList.slice(0, questionData.questionNumber - 1),
@@ -108,24 +114,24 @@ function QuizCreator() {
           ],
         }))
       } else {
-        setQuizData({
-          ...quizData,
-          questionList: [...quizData.questionList, questionData],
+        setQuestData({
+          ...questData,
+          questionList: [...questData.questionList, questionData],
         })
       }
     }
   }
 
-  const handleQuizSubmit = () => {
-    dispatch(updateQuiz(quiz._id, quizData, history))
+  const handleQuestSubmit = () => {
+    dispatch(updateQuest(quest._id, questData, history))
   }
 
   const handleQuestionChange = e => {
     setQuestionData({ ...questionData, [e.target.name]: e.target.value })
   }
 
-  const handleQuizChange = e => {
-    setQuizData({ ...quizData, [e.target.name]: e.target.value })
+  const handleQuestChange = e => {
+    setQuestData({ ...questData, [e.target.name]: e.target.value })
   }
 
   return (
@@ -135,7 +141,7 @@ function QuizCreator() {
           <Grid item xs container direction="column" spacing={2}>
             <Grid item xs={5}>
               <QuestionSettings
-                isQuizOptionsVisible={isQuizOptionsVisible}
+                isQuestOptionsVisible={isQuestOptionsVisible}
                 questionData={questionData}
                 handleQuestionChange={handleQuestionChange}
                 setQuestionType={setQuestionType}
@@ -143,7 +149,7 @@ function QuizCreator() {
                 setCorrectAmount={setCorrectAmount}
                 answerAmount={answerAmount}
                 setAnswerAmount={setAnswerAmount}
-                showQuizOptions={showQuizOptions}
+                showQuestOptions={showQuestOptions}
                 handleQuestionSubmit={handleQuestionSubmit}
                 questionType={questionType}
                 setQuestionData={setQuestionData}
@@ -151,13 +157,13 @@ function QuizCreator() {
                 isPickCorrectAnswers={isPickCorrectAnswers}
                 setIsPickCorrectAnswers={setIsPickCorrectAnswers}
               />
-              <QuizSettings
-                isQuizOptionsVisible={isQuizOptionsVisible}
-                quizData={quizData}
-                setQuizData={setQuizData}
-                handleQuizChange={handleQuizChange}
-                handleQuizSubmit={handleQuizSubmit}
-                showQuizOptions={showQuizOptions}
+              <QuestSettings
+                isQuestOptionsVisible={isQuestOptionsVisible}
+                questData={questData}
+                setQuestData={setQuestData}
+                handleQuestChange={handleQuestChange}
+                handleQuestSubmit={handleQuestSubmit}
+                showQuestOptions={showQuestOptions}
               />
             </Grid>
             <AddQuestion
@@ -172,16 +178,16 @@ function QuizCreator() {
           </Grid>
         </Grid>
         <QuestionDisplay
-          quizData={quizData}
-          setQuizData={setQuizData}
+          questData={questData}
+          setQuestData={setQuestData}
           setQuestionData={setQuestionData}
           isQuestionDataSave={isQuestionDataSave}
           setIsQuestionDataSave={setIsQuestionDataSave}
-          setIsQuizOptionsVisible={setIsQuizOptionsVisible}
+          setIsQuestOptionsVisible={setIsQuestOptionsVisible}
         />
       </Grid>
     </Box>
   )
 }
 
-export default QuizCreator
+export default QuestCreator

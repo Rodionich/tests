@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
-import { Box, Grid, TextField } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import { Box, Grid, TextField, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { addStudent } from '../actions/game'
+import { saveStudentScore } from '../actions/studentScore'
+import { StyledButton } from '../components/auth/styles'
 
 function Play() {
   const user = JSON.parse(localStorage.getItem('profile'))
@@ -11,6 +13,21 @@ function Play() {
   const socket = useSelector(state => state.gameReducer.socket)
   const [pin, setPin] = useState('')
   const [isJoined, setIsJoined] = useState(false)
+
+  useEffect(() => {
+    socket?.on('move-to-quest-page', gameId => {
+      dispatch(
+        saveStudentScore({
+          studentId: user.result._id,
+          questId: gameId,
+          points: 0,
+          answers: [],
+        }),
+      )
+      history(`/play/student/${gameId}`, { replace: true })
+    })
+  }, [socket, dispatch, history, user.result._id])
+
   const handlePin = e => {
     setPin(e.target.value)
   }
@@ -33,10 +50,24 @@ function Play() {
   }
 
   return (
-    <Grid>
+    <Grid
+      sx={{
+        minHeight: 'calc(100vh - 300px)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
       {!isJoined ? (
-        <Grid>
-          <h2>Join game</h2>
+        <Grid
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Typography variant="h1" sx={{ marginBottom: '20px' }}>
+            Join game
+          </Typography>
           <Box>
             <TextField
               fullWidth
@@ -45,10 +76,12 @@ function Play() {
               onChange={handlePin}
             />
           </Box>
-          <button onClick={joinQuest}>Join</button>
+          <StyledButton onClick={joinQuest}>Join</StyledButton>
         </Grid>
       ) : (
-        <Box>You have joined</Box>
+        <Typography variant="h1" sx={{ marginBottom: '20px' }}>
+          You have joined
+        </Typography>
       )}
     </Grid>
   )

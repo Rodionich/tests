@@ -24,23 +24,25 @@ const PORT = process.env.PORT || 8000;
 
 // app.use(authenticateToken);
 
-// mongoose.set("strictQuery", false);
-// mongoose
-//   .connect(process.env.MONGO_URL, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   })
-//   .then(() => {
-//     console.log("Connected to database Mongo");
-//   })
-//   .catch((e) => console.log(e));
+mongoose.set("strictQuery", false);
+mongoose
+  .connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Connected to database Mongo");
+  })
+  .catch((e) => console.log(e));
 
 const authRouter = require("./routes/auth");
-const quizRouter = require("./routes/quiz");
+const questRouter = require("./routes/quest");
 const gameRouter = require("./routes/game");
+const studentScoreRouter = require("./routes/game");
 app.use("/api/auth", authRouter);
-app.use("/api/quizes", quizRouter);
+app.use("/api/quests", questRouter);
 app.use("/api/game", gameRouter);
+app.use("/api/studentScore", studentScoreRouter);
 
 let quest;
 let students = [];
@@ -77,8 +79,6 @@ io.on("connection", (webSocket) => {
     );
   });
   webSocket.on("student-join", (user, socketId, pin, check) => {
-    console.log(quest.pin);
-    console.log(pin);
     if (quest.pin === pin) {
       addStudent(user.userName, socketId);
       check("correct", user._id, quest._id);
@@ -96,6 +96,21 @@ io.on("connection", (webSocket) => {
     } else {
       check("wrong", user._id, quest._id);
     }
+  });
+  webSocket.on("start-game", (newQuiz) => {
+    quiz = JSON.parse(JSON.stringify(newQuiz));
+    webSocket.to(quest.pin).emit("move-to-quest-page", quest._id);
+  });
+
+  webSocket.on("question-preview", (check) => {
+    check();
+    webSocket.to(quest.pin).emit("host-start-preview");
+  });
+
+  webSocket.on("start-question-timer", (time, question, cb) => {
+    console.log(question);
+    webSocket.to(quest.pin).emit("host-start-question-timer", time, question);
+    cb();
   });
 });
 

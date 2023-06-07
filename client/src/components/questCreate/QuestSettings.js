@@ -14,13 +14,13 @@ import SettingsTwoToneIcon from '@mui/icons-material/SettingsTwoTone'
 import CheckBoxTwoToneIcon from '@mui/icons-material/CheckBoxTwoTone'
 import { useStyles } from './styles'
 
-function QuizSettings({
-  isQuizOptionsVisible,
-  quizData,
-  setQuizData,
-  handleQuizChange,
-  handleQuizSubmit,
-  showQuizOptions,
+function QuestSettings({
+  isQuestOptionsVisible,
+  questData,
+  setQuestData,
+  handleQuestChange,
+  handleQuestSubmit,
+  showQuestOptions,
 }) {
   const classes = useStyles()
   return (
@@ -29,17 +29,17 @@ function QuizSettings({
       container
       spacing={2}
       style={{
-        display: isQuizOptionsVisible ? 'flex' : 'none',
+        display: isQuestOptionsVisible ? 'flex' : 'none',
       }}>
       <Grid item xs={4}>
         <Box>
           <Typography variant="h4" sx={{ marginBottom: '15px' }}>
-            Quiz
+            Title
           </Typography>
           <TextField
-            value={quizData.title}
+            value={questData.title}
             name="title"
-            onChange={handleQuizChange}></TextField>
+            onChange={handleQuestChange}></TextField>
         </Box>
       </Grid>
       <Grid item xs={4}>
@@ -48,9 +48,9 @@ function QuizSettings({
             Description
           </Typography>
           <TextField
-            value={quizData.description}
+            value={questData.description}
             name="description"
-            onChange={handleQuizChange}></TextField>
+            onChange={handleQuestChange}></TextField>
         </Box>
       </Grid>
       <Grid item xs={4}>
@@ -61,9 +61,9 @@ function QuizSettings({
           <TextField
             type="number"
             min={1}
-            value={quizData.pointsPerQuestion}
+            value={questData.pointsPerQuestion}
             name="pointsPerQuestion"
-            onChange={handleQuizChange}></TextField>
+            onChange={handleQuestChange}></TextField>
         </Box>
       </Grid>
       <Grid item xs={4}>
@@ -72,16 +72,16 @@ function QuizSettings({
             <Typography variant="h4">Access</Typography>
             <RadioGroup
               aria-labelledby="demo-radio-buttons-group-label"
-              value={quizData.isPublic}
+              value={questData.isPublic}
               name="isPublic"
-              onChange={handleQuizChange}>
+              onChange={handleQuestChange}>
               <FormControlLabel
-                value="false"
+                value="true"
                 control={<Radio />}
                 label="Public"
               />
               <FormControlLabel
-                value="true"
+                value="false"
                 control={<Radio />}
                 label="Private"
               />
@@ -106,8 +106,8 @@ function QuizSettings({
               // console.log(reader)
               reader.onload = () => {
                 // console.log(reader.result)
-                setQuizData({
-                  ...quizData,
+                setQuestData({
+                  ...questData,
                   [e.target.name]: reader.result,
                 })
               }
@@ -124,12 +124,12 @@ function QuizSettings({
           justifyContent: 'flex-end',
         }}>
         <Box>
-          <IconButton onClick={showQuizOptions}>
+          <IconButton onClick={showQuestOptions}>
             <SettingsTwoToneIcon />
           </IconButton>
         </Box>
         <Box>
-          <IconButton onClick={handleQuizSubmit}>
+          <IconButton onClick={handleQuestSubmit}>
             <CheckBoxTwoToneIcon />
           </IconButton>
         </Box>
@@ -138,4 +138,4 @@ function QuizSettings({
   )
 }
 
-export default QuizSettings
+export default QuestSettings

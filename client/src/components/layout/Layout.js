@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import { React, useEffect, useState } from 'react'
 import Topbar from '../topbar/Topbar'
 import Sidebar from '../sidebar/Sidebar'
 import { useLocation, Outlet } from 'react-router-dom'
@@ -11,12 +11,13 @@ const Layout = () => {
   const isNonMobile = useMediaQuery('(min-width:600px)')
   const classes = useStyles()
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
-  console.log(user)
-  return location.pathname === '/auth' || user === null ? (
-    <>
-      <Outlet />
-    </>
-  ) : (
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem('profile')))
+  }, [])
+
+  if (location.pathname === '/auth' || user === null) return <Outlet />
+  return (
     <Box
       display={isNonMobile ? 'flex' : 'block'}
       justifyContent="space-between"
