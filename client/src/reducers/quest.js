@@ -15,16 +15,12 @@ const initialState = { isLoading: true, quests: [], quest: {} }
 const questReducer = (state = initialState, action) => {
   switch (action.type) {
     case START_LOADING:
-      // console.log({ ...state, isLoading: true })
       return { ...state, isLoading: true }
     case END_LOADING:
-      // console.log({ ...state, isLoading: false })
       return { ...state, isLoading: false }
     case CREATE_QUEST:
-      // console.log({ ...state, quests: [...state.quests, action.payload] })
       return { ...state, quests: [...state.quests, action.payload] }
     case GET_QUEST:
-      // console.log({ ...state, quest: action.payload.quest })
       return { ...state, quest: action.payload.quest }
     case REMOVE_QUEST:
       return {
@@ -33,7 +29,6 @@ const questReducer = (state = initialState, action) => {
       }
     case GET_PERSONAL_QUESTS:
     case SEARCH_QUESTS:
-      // console.log({ ...state, quests: action.payload })
       return { ...state, quests: action.payload }
     case GET_PUBLIC_QUESTS:
       return {

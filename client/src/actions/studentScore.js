@@ -6,6 +6,6 @@ export const saveStudentScore = studentScore => async dispatch => {
     const { data } = await api.saveStudentScore(studentScore)
     dispatch({ type: SAVE_STUDENT_SCORE, payload: data })
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }

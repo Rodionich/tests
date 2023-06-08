@@ -51,25 +51,19 @@ function QuestCreator() {
     questionList: [],
   })
 
-  // const userId = useSelector(
-  //   state =>
-  //     state.questReducer.quests[state.questReducer.quests.length - 1]._id,
-  // )
   const { userId } = useParams()
 
   const quest = useSelector(state => state.questReducer.quest)
 
   useEffect(() => {
     dispatch(getQuest(userId))
-  }, [userId, dispatch])
+  }, [userId]) // eslint-disable-line
 
   useEffect(() => {
     if (quest) {
       setQuestData(quest)
     }
   }, [quest])
-
-  console.log(quest)
 
   const showQuestOptions = () => {
     setIsQuestOptionsVisible(!isQuestOptionsVisible)
@@ -184,6 +178,7 @@ function QuestCreator() {
           isQuestionDataSave={isQuestionDataSave}
           setIsQuestionDataSave={setIsQuestionDataSave}
           setIsQuestOptionsVisible={setIsQuestOptionsVisible}
+          setIsPickCorrectAnswers={setIsPickCorrectAnswers}
         />
       </Grid>
     </Box>

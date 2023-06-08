@@ -28,7 +28,7 @@ function Quest({ key, quest }) {
   }
 
   return (
-    <Grid container xs={4} sx={{ marginBottom: '15px' }}>
+    <Grid container xs={4} item sx={{ marginBottom: '15px' }}>
       <Card className={classes.card}>
         <Grid container>
           <Grid item xs={6}>

@@ -11,7 +11,7 @@ function Home() {
   const classes = useStyles()
 
   return (
-    <Grid container xs={12} className={classes.root}>
+    <Grid container xs={12} item className={classes.root}>
       <Grid
         item
         container
@@ -28,7 +28,7 @@ function Home() {
                   ? require('../assets/student.png')
                   : require('../assets/teacher.png')
               }
-              alt="image profile"
+              alt="profile"
             />
           </Grid>
           <Grid item xs={8} className={classes.info}>

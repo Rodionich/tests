@@ -1,5 +1,5 @@
 import { Box, Card, Stack, TextField } from '@mui/material'
-import React, { forwardRef, useState } from 'react'
+import React, { useState } from 'react'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import { StyledButton } from '../auth/styles'
 import { useDispatch } from 'react-redux'
@@ -8,7 +8,7 @@ const CommentSection = ({ userId, questId }) => {
   const [commentText, setCommentText] = useState('')
   const dispatch = useDispatch()
 
-  const handleSendButton = e => {
+  const handleSendButton = () => {
     if (commentText) {
       dispatch(commentQuest(commentText.trim(), questId, userId))
     }

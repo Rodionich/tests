@@ -14,11 +14,12 @@ function PublicQuests() {
   const [search, setSearch] = useState('')
   const dispatch = useDispatch()
   const history = useNavigate()
-  const { quests, isLoading } = useSelector(state => state.questReducer)
+  const { quests } = useSelector(state => state.questReducer)
 
   useEffect(() => {
     dispatch(getPublicQuests())
-  }, [dispatch])
+  }, []) // eslint-disable-line
+
   const addKeywords = e => {
     if (e.target.value !== '') {
       setKeywords([...keywords, e.target.value])
@@ -45,7 +46,7 @@ function PublicQuests() {
 
   return (
     <>
-      <Grid container xs={8} direction="column" className={classes.root}>
+      <Grid container xs={8} item direction="column" className={classes.root}>
         <Typography variant="h2" sx={{ marginBottom: '15px' }}>
           Search Public Quests
         </Typography>
@@ -103,6 +104,7 @@ function PublicQuests() {
         </Grid>
       </Grid>
       <Grid
+        item
         xs={12}
         className={classes.publicQuests}
         sx={{

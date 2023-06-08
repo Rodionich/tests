@@ -5,9 +5,9 @@ const gameSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  quizId: {
+  questId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Quiz",
+    ref: "Quest",
   },
   pin: {
     type: String,

@@ -8,7 +8,7 @@ export const createWebSocket = data => async dispatch => {
   try {
     dispatch({ type: CREATE_WEBSOCKET, payload: data })
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
@@ -16,10 +16,10 @@ export const activateGame = (gameData, history) => async dispatch => {
   try {
     const { data } = await api.activateGame(gameData)
     dispatch({ type: ACTIVATE_GAME, payload: data })
-    history(`/play/teacher/${data._id}`, { replace: true })
+    history(`/play/teacher/${data.questId}`, { replace: true })
     return data
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
@@ -29,6 +29,6 @@ export const addStudent = (studentId, questId) => async dispatch => {
     dispatch({ type: ADD_STUDENT, payload: data })
     return data
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }

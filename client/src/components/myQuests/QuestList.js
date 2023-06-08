@@ -4,8 +4,8 @@ import Quest from './Quest'
 function QuestList({ questsList }) {
   return (
     <>
-      {questsList.map(quest => (
-        <Quest key={quest.id} quest={quest} />
+      {questsList?.map(quest => (
+        <Quest key={quest._id} quest={quest} />
       ))}
     </>
   )

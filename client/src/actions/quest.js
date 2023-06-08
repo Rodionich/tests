@@ -18,16 +18,15 @@ export const createQuest = (quest, history) => async dispatch => {
     dispatch({ type: CREATE_QUEST, payload: data })
     history(`/myQuests/${data._id}`, { replace: true })
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 export const getQuest = id => async dispatch => {
   try {
-    console.log('action')
     const { data } = await api.getQuest(id)
     dispatch({ type: GET_QUEST, payload: { quest: data } })
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 export const updateQuest = (id, quest, history) => async dispatch => {
@@ -36,7 +35,7 @@ export const updateQuest = (id, quest, history) => async dispatch => {
     dispatch({ type: UPDATE_QUEST, payload: data })
     history(`/myQuests`, { replace: true })
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
@@ -45,7 +44,7 @@ export const removeQuest = id => async dispatch => {
     await api.removeQuest(id)
     dispatch({ type: REMOVE_QUEST, payload: id })
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
@@ -56,7 +55,7 @@ export const getPersonalQuests = id => async dispatch => {
     dispatch({ type: GET_PERSONAL_QUESTS, payload: data })
     dispatch({ type: END_LOADING })
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
@@ -70,7 +69,7 @@ export const getPublicQuests = () => async dispatch => {
     })
     dispatch({ type: END_LOADING })
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
@@ -81,7 +80,7 @@ export const searchQuests = search => async dispatch => {
     dispatch({ type: SEARCH_QUESTS, payload: data })
     dispatch({ type: END_LOADING })
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
@@ -90,7 +89,7 @@ export const likeQuest = (questId, userId) => async dispatch => {
     const { data } = await api.likeQuest(questId, userId)
     dispatch({ type: LIKE_QUEST, payload: data })
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
@@ -100,6 +99,6 @@ export const commentQuest = (comment, questId, userId) => async dispatch => {
     dispatch({ type: COMMENT_QUEST, payload: data })
     return data.comments
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }

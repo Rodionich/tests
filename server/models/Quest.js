@@ -48,7 +48,7 @@ const questSchema = new mongoose.Schema({
           isCorrect: { type: Boolean },
         },
       ],
-      questionIndex: { type: Number, required: true },
+      questionNumber: { type: Number, required: true },
     },
   ],
   dateCreated: { type: Date, default: new Date() },

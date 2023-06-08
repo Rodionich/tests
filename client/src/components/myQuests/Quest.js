@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { activateGame } from '../../actions/game'
 import { removeQuest } from '../../actions/quest'
 
-function Quest({ key, quest }) {
+function Quest({ quest }) {
   const classes = useStyles()
   const history = useNavigate()
   const dispatch = useDispatch()
@@ -28,14 +28,15 @@ function Quest({ key, quest }) {
   const openQuestCreator = e => {
     history(`/myQuests/${quest._id}`)
   }
-  const startGame = async () => {
+  const startGame = () => {
     let gameData = {
+      ...quest,
       questId: quest._id,
-      teacherId: quest.teacherId,
+      creatorId: quest.creatorId,
       isLive: true,
       pin: String(Math.floor(Math.random() * 900000) + 100000),
     }
-    const activatedGame = await dispatch(activateGame(gameData, history))
+    const activatedGame = dispatch(activateGame(gameData, history))
     socket.emit('init-game', activatedGame)
   }
 

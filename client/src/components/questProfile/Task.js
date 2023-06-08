@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Grid, Typography } from '@mui/material'
+import { Grid } from '@mui/material'
 import { useStyles } from './styles'
 import AnswerList from '../game/AnswerList'
 

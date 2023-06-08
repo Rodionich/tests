@@ -30,14 +30,13 @@ function MyQuests() {
     description: '',
     keywords: '',
     pointsPerQuestion: 1,
-    isPublic: 'false',
+    isPublic: false,
     questionList: [],
   })
 
-  console.log('isPublic', questData.isPublic)
   useEffect(() => {
     dispatch(getPersonalQuests(user.result._id))
-  }, [])
+  }, [user.result._id]) // eslint-disable-line
 
   const quests = useSelector(state => state.questReducer.quests)
   const handleSubmit = () => {
@@ -104,12 +103,12 @@ function MyQuests() {
                   name="isPublic"
                   onChange={handleChange}>
                   <FormControlLabel
-                    value="true"
+                    value={true}
                     control={<Radio />}
                     label="Public"
                   />
                   <FormControlLabel
-                    value="false"
+                    value={false}
                     control={<Radio />}
                     label="Private"
                   />

@@ -11,6 +11,7 @@ function QuestionDisplay({
   setQuestData,
   setIsQuestionDataSave,
   setIsQuestOptionsVisible,
+  setIsPickCorrectAnswers,
 }) {
   const classes = useStyles()
 
@@ -18,6 +19,7 @@ function QuestionDisplay({
     resetQuestionData()
     setIsQuestionDataSave(false)
     setIsQuestOptionsVisible(false)
+    setIsPickCorrectAnswers({ answersIndexes: [], isPick: false })
   }
 
   const resetQuestionData = () => {
@@ -75,6 +77,7 @@ function QuestionDisplay({
       container
       gap={2}
       xs={4}
+      item
       className={classes.displayQuestion}
       sx={{
         alignContent: 'flex-start',
@@ -91,24 +94,23 @@ function QuestionDisplay({
           onClick={() => {
             isQuestionDataSave
               ? addNewQuestion()
-              : console.log('Save changes, please')
+              : alert('Save changes, please')
           }}>
           <AddIcon />
         </IconButton>
       </Grid>
 
-      {questData.questionList.length > 0 &&
-        questData.questionList.map(question => (
-          <QuestionsList
-            key={question.questionNumber}
-            onClick={() => pickQuestion(question.questionNumber)}
-            deleteQuestion={() => deleteQuestion(question.questionNumber)}
-            questionNumber={question.questionNumber}
-            questionType={question.questionType}
-            answerTime={question.answerTime}
-            backgroundImage={question.backgroundImage}
-          />
-        ))}
+      {questData?.questionList?.map(question => (
+        <QuestionsList
+          key={question.questionNumber}
+          onClick={() => pickQuestion(question.questionNumber)}
+          deleteQuestion={() => deleteQuestion(question.questionNumber)}
+          questionNumber={question.questionNumber}
+          questionType={question.questionType}
+          answerTime={question.answerTime}
+          backgroundImage={question.backgroundImage}
+        />
+      ))}
     </Grid>
   )
 }

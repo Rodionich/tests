@@ -1,24 +1,20 @@
-import React, {useContext, useState} from 'react'
-import {Grid, Box, useTheme, IconButton, InputBase, Typography} from '@mui/material'
+import React, { useContext, useState } from 'react'
+import { Grid, Box, useTheme, IconButton, Typography } from '@mui/material'
 import { ColorSwitchMode, tokens } from '../../theme/theme'
 import LightModeIcon from '@mui/icons-material/LightMode'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
-import SearchIcon from '@mui/icons-material/Search'
-import { useStyles } from './styles'
 
 function Topbar() {
   const user = JSON.parse(localStorage.getItem('profile'))
   const colorMode = useContext(ColorSwitchMode)
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
-  const classes = useStyles()
-    const time = new Date().toLocaleTimeString();
-  const [currentTime, setCurrentTime] = useState(time);
+  const time = new Date().toLocaleTimeString()
+  const [currentTime, setCurrentTime] = useState(time)
 
   const updateTime = () => {
-      const time = new Date().toLocaleTimeString();
-      setCurrentTime(time)
+    const time = new Date().toLocaleTimeString()
+    setCurrentTime(time)
   }
 
   setInterval(updateTime, 1000)
@@ -50,11 +46,9 @@ function Topbar() {
             backgroundColor: `${colors.primary[600]}`,
             borderRadius: '8px',
             ml: '28px',
-              padding: '10px'
+            padding: '10px',
           }}>
-            <Typography variant="h6" >
-                {currentTime}
-            </Typography>
+          <Typography variant="h6">{currentTime}</Typography>
         </Grid>
       </Box>
     </Box>

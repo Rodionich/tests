@@ -1,13 +1,12 @@
-const mongoose = require("mongoose");
 const Game = require("../models/Game");
 
 const activateGame = async (req, res) => {
-  const { teacherId, quizId, isLive, playerList, playerResultList, pin } =
+  const { creatorId, questId, isLive, playerList, playerResultList, pin } =
     req.body;
 
   const game = new Game({
-    teacherId,
-    quizId,
+    teacherId: creatorId,
+    questId,
     date: new Date().toISOString(),
     pin,
     isLive,

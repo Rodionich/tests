@@ -1,14 +1,13 @@
 import { useStyles } from '../components/questProfile/styles'
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { commentQuest, getPersonalQuests, getQuest } from '../actions/quest'
-import { Box, Grid, Stack, TextField, Typography } from '@mui/material'
+import { getPersonalQuests, getQuest } from '../actions/quest'
+import { Box, Grid, Stack, Typography } from '@mui/material'
 import CommentSection from '../components/questProfile/CommentSection'
 import Task from '../components/questProfile/Task'
 import Quest from '../components/publicQuests/Quest'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import { StyledButton } from '../components/auth/styles'
 
 function QuestProfile() {
   const { questId } = useParams()
@@ -24,13 +23,13 @@ function QuestProfile() {
 
   useEffect(() => {
     dispatch(getQuest(questId))
-  }, [questId, dispatch])
+  }, [questId]) // eslint-disable-line
 
   useEffect(() => {
     if (quest) {
       dispatch(getPersonalQuests(quest.creatorId))
     }
-  }, [quest, dispatch])
+  }, [quest]) // eslint-disable-line
 
   return (
     <>
@@ -39,6 +38,7 @@ function QuestProfile() {
       </Typography>
       <Grid
         container
+        item
         xs={12}
         gap={3}
         direction="column"
@@ -106,7 +106,7 @@ function QuestProfile() {
               marginBottom: '20px',
             }}
             className={classes.tasks}>
-            {quest.comments?.map((comment, index) => (
+            {quest.comments?.map(comment => (
               <Stack direction="row" alignItems="center">
                 <AccountCircleIcon fontSize={'large'} />
                 <Box>
@@ -117,11 +117,7 @@ function QuestProfile() {
               </Stack>
             ))}
           </Grid>
-          <CommentSection
-            ref={chatRef}
-            userId={user.result._id}
-            questId={questId}
-          />
+          <CommentSection userId={user.result._id} questId={questId} />
         </Grid>
       </Grid>
       <Typography variant="h2" className={classes.root}>
@@ -145,6 +141,7 @@ function QuestProfile() {
       </Typography>
       <Grid
         xs={12}
+        item
         className={classes.publicQuests}
         sx={{
           justifyContent: 'flex-start',

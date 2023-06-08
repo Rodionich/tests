@@ -7,7 +7,7 @@ export const login = (formData, history) => async dispatch => {
     dispatch({ type: AUTH, data })
     history('/', { replace: true })
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 export const logout = history => async dispatch => {
@@ -15,7 +15,7 @@ export const logout = history => async dispatch => {
     dispatch({ type: LOGOUT })
     history('/auth', { replace: true })
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
 
@@ -25,6 +25,6 @@ export const register = (formData, history) => async dispatch => {
     dispatch({ type: AUTH, data })
     history('/', { replace: true })
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }

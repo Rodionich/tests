@@ -9,7 +9,6 @@ function AnswersList({
   answerAmount,
   updateAnswer,
   updateCorrectAnswer,
-  isPickCorrectAnswers,
 }) {
   const colors = [
     '#2d70ae',

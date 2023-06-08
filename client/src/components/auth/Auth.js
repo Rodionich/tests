@@ -74,11 +74,11 @@ function Auth() {
     }
 
     if ('email' in formValues)
-      temp.email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formValues.email)
+      temp.email = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formValues.email)
         ? ''
         : 'Email is not valid.'
     if ('email2' in formValues)
-      temp.email2 = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formValues.email)
+      temp.email2 = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formValues.email)
         ? ''
         : 'Email is not valid.'
     if ('password' in formValues)

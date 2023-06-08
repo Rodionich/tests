@@ -25,7 +25,7 @@ function AddQuestion({
 
   const updateAnswer = (answer, index) => {
     const newAnswerList = questionData.answerList.map(data =>
-      data.answerNumber === index ? { ...data, answer: answer } : data,
+      data.answerNumber === index ? { ...data, answer } : data,
     )
     setQuestionData({
       ...questionData,
@@ -73,7 +73,7 @@ function AddQuestion({
     isPickCorrectAnswers.answersIndexes.length >= correctAmount
       ? setIsPickCorrectAnswers({ ...isPickCorrectAnswers, isPick: true })
       : setIsPickCorrectAnswers({ ...isPickCorrectAnswers, isPick: false })
-  }, [correctAmount, isPickCorrectAnswers, setIsPickCorrectAnswers])
+  }, [correctAmount, isPickCorrectAnswers.answersIndexes]) // eslint-disable-line
 
   return (
     <Grid item xs={7} className={classes.addQuestion}>

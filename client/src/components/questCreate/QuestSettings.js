@@ -76,12 +76,12 @@ function QuestSettings({
               name="isPublic"
               onChange={handleQuestChange}>
               <FormControlLabel
-                value="true"
+                value={true}
                 control={<Radio />}
                 label="Public"
               />
               <FormControlLabel
-                value="false"
+                value={false}
                 control={<Radio />}
                 label="Private"
               />
@@ -101,11 +101,8 @@ function QuestSettings({
             name="backgroundImage"
             onChange={e => {
               const reader = new FileReader()
-              // console.log(e.target.files[0])
               reader.readAsDataURL(e.target.files[0])
-              // console.log(reader)
               reader.onload = () => {
-                // console.log(reader.result)
                 setQuestData({
                   ...questData,
                   [e.target.name]: reader.result,

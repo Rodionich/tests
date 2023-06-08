@@ -15,7 +15,7 @@ const playerResultSchema = new mongoose.Schema({
   },
   answers: [
     {
-      questionIndex: { type: Number },
+      questionNumber: { type: Number },
       answered: {
         type: Boolean,
         default: false,

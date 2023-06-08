@@ -3,17 +3,17 @@ import WaitingRoom from './WaitingRoom'
 import Task from './Task'
 import { Box, Grid, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
 import { getQuest } from '../../actions/quest'
 import { useStyles } from './styles'
 import { StyledButton } from '../auth/styles'
+import { useParams } from 'react-router-dom'
 
 function TeacherScreen() {
   const socket = useSelector(state => state.gameReducer.socket)
   const game = useSelector(
     state => state.gameReducer.games[state.gameReducer.games.length - 1],
   )
-  const { id } = useParams()
+  const { questId } = useParams()
   const dispatch = useDispatch()
   const quest = useSelector(state => state.questReducer.quest)
   const [isQuestActivated, setIsQuestActivated] = useState(false)
@@ -39,11 +39,8 @@ function TeacherScreen() {
   })
 
   useEffect(() => {
-    if (game) {
-      console.log(game)
-      dispatch(getQuest(game._id))
-    }
-  }, [dispatch, game])
+    dispatch(getQuest(questId))
+  }, []) // eslint-disable-line
 
   const activateQuest = () => {
     socket.emit('start-game', quest)
@@ -90,7 +87,7 @@ function TeacherScreen() {
       let time = quest.questionList[number].answerTime
       let question = {
         answerList: quest.questionList[number].answerList,
-        questionNumber: quest.questionList[number].questionIndex,
+        questionNumber: quest.questionList[number].questionNumber,
         correctAnswersCount: quest.questionList[number].answerList.filter(
           answer => answer.isCorrect === true,
         ).length,

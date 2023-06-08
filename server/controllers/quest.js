@@ -42,7 +42,6 @@ const createQuest = async (req, res) => {
 
 const getQuest = async (req, res) => {
   try {
-    console.log(req.params);
     const quest = await Quest.findById(req.params.id);
     if (!quest) {
       return res.status(404).json({ message: "Quest not found" });
@@ -184,10 +183,10 @@ const removeTask = async (req, res) => {
   const quest = await Quest.findById(questId);
 
   try {
-    let questionIndex = quest.questionList.findIndex(
+    let questionNumber = quest.questionList.findIndex(
       (obj) => obj._id == questionId
     );
-    quest.questionList.splice(questionIndex, 1);
+    quest.questionList.splice(questionNumber, 1);
     quest.numberOfQuestions -= 1;
     await Quest.findByIdAndUpdate(questId, quest, {
       new: true,
@@ -222,10 +221,10 @@ const updateTask = async (req, res) => {
     if (quest == null) {
       return res.status(404).json({ message: "Quest not found" });
     }
-    let questionIndex = quest.questionList.findIndex(
+    let questionNumber = quest.questionList.findIndex(
       (obj) => obj._id == questionId
     );
-    quest.questionList[questionIndex] = {
+    quest.questionList[questionNumber] = {
       _id: questionId,
       questionType,
       question,
@@ -295,8 +294,6 @@ const searchQuests = async (req, res) => {
 const commentQuest = async (req, res) => {
   const { questId } = req.params;
   const { comment, userId } = req.body;
-  console.log("questId", questId);
-  console.log("userId", userId);
 
   try {
     const user = await User.findById(userId);
@@ -305,7 +302,6 @@ const commentQuest = async (req, res) => {
     const updatedQuest = await Quest.findByIdAndUpdate(questId, quest, {
       new: true,
     });
-    console.log(updatedQuest.comments);
     res.status(200).send(updatedQuest);
   } catch (error) {
     res.status(400).json({ message: error.message });

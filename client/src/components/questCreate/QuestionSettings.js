@@ -59,11 +59,6 @@ function QuestionSettings({
     setAnswerAmount(currentAmount)
     setCorrectAmount(1)
 
-    // console.log('e')
-    // console.log(currentAmount)
-    // console.log('amountIn')
-    // console.log(answerAmount)
-
     if (currentAmount < questionData.answerList.length) {
       setQuestionData(prevState => ({
         ...prevState,

@@ -33,7 +33,7 @@ mongoose
   .then(() => {
     console.log("Connected to database Mongo");
   })
-  .catch((e) => console.log(e));
+  .catch((e) => console.error(e));
 
 const authRouter = require("./routes/auth");
 const questRouter = require("./routes/quest");
@@ -70,27 +70,12 @@ io.on("connection", (webSocket) => {
   webSocket.on("init-game", (activateGame) => {
     quest = JSON.parse(JSON.stringify(activateGame));
     webSocket.join(quest);
-    const teacherId = webSocket.id;
-    console.log(
-      "Host with id " +
-        webSocket.id +
-        " started game and joined room: " +
-        quest.pin
-    );
   });
   webSocket.on("student-join", (user, socketId, pin, check) => {
     if (quest.pin === pin) {
       addStudent(user.userName, socketId);
       check("correct", user._id, quest._id);
       webSocket.join(quest.pin);
-      console.log(
-        "Student " +
-          user.userName +
-          " with id " +
-          webSocket.id +
-          " joined room " +
-          quest.pin
-      );
       let student = getStudent(socketId);
       io.emit("student-added", student);
     } else {
@@ -108,7 +93,6 @@ io.on("connection", (webSocket) => {
   });
 
   webSocket.on("start-question-timer", (time, question, cb) => {
-    console.log(question);
     webSocket.to(quest.pin).emit("host-start-question-timer", time, question);
     cb();
   });

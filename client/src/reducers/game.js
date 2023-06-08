@@ -9,7 +9,6 @@ const gameReducer = (state = { socket: null, games: [] }, action) => {
     case CREATE_WEBSOCKET:
       return { ...state, socket: action.payload }
     case ACTIVATE_GAME:
-      console.log(action.payload)
       return { ...state, games: [...state.games, action.payload] }
     case ADD_STUDENT:
       return {

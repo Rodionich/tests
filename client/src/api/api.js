@@ -1,11 +1,16 @@
 import axios from 'axios'
 
-const AUTH_API = axios.create({ baseURL: 'http://localhost:5000/api/auth' })
+const { REACT_APP_SERVER_PORT } = process.env
+const AUTH_API = axios.create({
+  baseURL: `http://localhost:${REACT_APP_SERVER_PORT}/api/auth`,
+})
 
 export const userLogin = formData => AUTH_API.post('/login', formData)
 export const userRegister = formData => AUTH_API.post('/register', formData)
 
-const API = axios.create({ baseURL: 'http://localhost:5000/api' })
+const API = axios.create({
+  baseURL: `http://localhost:${REACT_APP_SERVER_PORT}/api`,
+})
 export const createQuest = newQuest => API.post('/quests', newQuest)
 export const getQuest = id => API.get(`/quests/${id}`, id)
 

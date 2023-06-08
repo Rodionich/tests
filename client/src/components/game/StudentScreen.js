@@ -9,11 +9,11 @@ function StudentScreen() {
   const [timeToStart, setTimeToStart] = useState(3)
   const [isDisplayTimer, setIsDisplayTimer] = useState(false)
   const [isDisplayTask, setIsDisplayTask] = useState(false)
-  const [answerTime, setAnswerTime] = useState(0)
+  const [, setAnswerTime] = useState(0)
   const [questionData, setQuestionData] = useState([])
-  const [correctAnswerCount, setCorrectAnswerCount] = useState(1)
+  const [, setCorrectAnswerCount] = useState(1)
   const classes = useStyles()
-  const [answer, setAnswer] = useState({
+  const [, setAnswer] = useState({
     questionNumber: 0,
     answers: [],
     time: 0,

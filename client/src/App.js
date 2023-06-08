@@ -18,15 +18,18 @@ import { createWebSocket } from './actions/game'
 import TeacherScreen from './components/game/TeacherScreen'
 import StudentScreen from './components/game/StudentScreen'
 import QuestProfile from './pages/QuestProfile'
+
 function App() {
   const [theme, colorMode] = useMode('dark')
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const socket = socketIO.connect('http://localhost:5000')
+    const socket = socketIO.connect(
+      `http://localhost:${process.env.REACT_APP_SERVER_PORT}`,
+    )
     dispatch(createWebSocket(socket))
     return () => socket.disconnect()
-  }, [dispatch])
+  }, []) // eslint-disable-line
 
   return (
     <ColorSwitchMode.Provider value={colorMode}>
@@ -48,8 +51,14 @@ function App() {
                 />
                 <Route path="/contacts" element={<Contacts />} />
                 <Route path="/about" element={<About />} />
-                <Route path="/play/teacher/:id" element={<TeacherScreen />} />
-                <Route path="/play/student/:id" element={<StudentScreen />} />
+                <Route
+                  path="/play/teacher/:questId"
+                  element={<TeacherScreen />}
+                />
+                <Route
+                  path="/play/student/:questId"
+                  element={<StudentScreen />}
+                />
               </Route>
               <Route path="/auth" element={<Auth />} />
             </Route>

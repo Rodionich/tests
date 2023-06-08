@@ -1,7 +1,5 @@
 import React from 'react'
-import { Box, Grid, IconButton, TextField } from '@mui/material'
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
+import { Box, Grid, TextField } from '@mui/material'
 
 function AnswersList({ answer, answerNumber, answerAmount }) {
   const colors = [
