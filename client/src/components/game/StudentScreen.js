@@ -1,23 +1,37 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Grid, Typography } from '@mui/material'
-import { useSelector } from 'react-redux'
+import { addAnswer, getPlayerResult } from '../../actions/studentScore'
+import { useDispatch, useSelector } from 'react-redux'
 import { useStyles } from './styles'
 import AnswerButton from './AnswerButton'
 
 function StudentScreen() {
+  const dispatch = useDispatch()
   const socket = useSelector(state => state.gameReducer.socket)
   const [timeToStart, setTimeToStart] = useState(3)
   const [isDisplayTimer, setIsDisplayTimer] = useState(false)
   const [isDisplayTask, setIsDisplayTask] = useState(false)
-  const [, setAnswerTime] = useState(0)
   const [questionData, setQuestionData] = useState([])
-  const [, setCorrectAnswerCount] = useState(1)
   const classes = useStyles()
-  const [, setAnswer] = useState({
+  const [answer, setAnswer] = useState({
     questionNumber: 0,
     answers: [],
     time: 0,
   })
+  const { playerResult } = useSelector(state => state.studentScore)
+  const [result, setResult] = useState(playerResult?.answers[0])
+
+  const [isQuestionAnswered, setIsQuestionAnswered] = useState(false)
+  const [isPreviewScreen, setIsPreviewScreen] = useState(false)
+  const [isQuestionScreen, setIsQuestionScreen] = useState(false)
+  const [isResultScreen, setIsResultScreen] = useState(false)
+  const [timer, setTimer] = useState(0)
+  const [answerTime, setAnswerTime] = useState(0)
+  const [correctAnswerCount, setCorrectAnswerCount] = useState(1)
+
+  useEffect(() => {
+    setTimer(5)
+  }, [])
 
   useEffect(() => {
     socket.on('host-start-preview', () => {
@@ -64,6 +78,64 @@ function StudentScreen() {
     }, 1000)
   }
 
+  const sendAnswer = async () => {
+    const updatedPlayerResult = await dispatch(
+      addAnswer(answer, playerResult._id),
+    )
+    console.log(
+      updatedPlayerResult.answers[updatedPlayerResult.answers.length - 1],
+    )
+    setResult(
+      updatedPlayerResult.answers[updatedPlayerResult.answers.length - 1],
+    )
+    let data = {
+      questionIndex: answer.questionIndex,
+      playerId: updatedPlayerResult.playerId,
+      playerPoints:
+        updatedPlayerResult.answers[answer.questionIndex - 1].points,
+    }
+    let score = updatedPlayerResult.score
+    socket.emit('send-answer-to-host', data, score)
+    dispatch(getPlayerResult(playerResult._id))
+  }
+
+  const checkAnswer = index => {
+    let answerIndex = answer.answers.findIndex(obj => obj === index)
+    if (answer.answers.includes(index)) {
+      //remove answer
+      setAnswer(prevstate => ({
+        ...prevstate,
+        answers: [
+          ...prevstate.answers.slice(0, answerIndex),
+          ...prevstate.answers.slice(answerIndex + 1, prevstate.answers.length),
+        ],
+      }))
+    } else {
+      //add answer
+      setAnswer(prevstate => ({
+        ...prevstate,
+        answers: [...prevstate.answers, index],
+      }))
+    }
+    setAnswer(prevstate => ({
+      ...prevstate,
+      time: answerTime,
+    }))
+  }
+
+  useEffect(() => {
+    if (
+      answer?.answers.length > 0 &&
+      answer?.answers.length === correctAnswerCount
+    ) {
+      setIsQuestionScreen(false)
+      setIsQuestionAnswered(true)
+      sendAnswer()
+    } else {
+      setIsQuestionAnswered(false)
+    }
+  }, [answer?.answers.length, correctAnswerCount, answer, socket, sendAnswer])
+
   return (
     <>
       {isDisplayTimer && (
@@ -102,6 +174,7 @@ function StudentScreen() {
           <Grid item container spacing={2} className={classes.root}>
             {questionData?.map((answer, index) => (
               <AnswerButton
+                onClick={checkAnswer(index + 1)}
                 key={index}
                 answerAmount={questionData.length}
                 answerNumber={index}

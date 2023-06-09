@@ -9,3 +9,7 @@ export const saveStudentScore = studentScore => async dispatch => {
     console.error(error)
   }
 }
+
+export const addAnswer = () => async dispatch => {}
+
+export const getPlayerResult = () => async dispatch => {}

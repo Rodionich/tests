@@ -1,8 +1,8 @@
 import React from 'react'
-import { Box, Button, Grid } from '@mui/material'
+import { Button, Grid } from '@mui/material'
 import { useStyles } from './styles'
 
-function AnswersButton({ answerNumber, answerAmount }) {
+function AnswersButton({ answerNumber, answerAmount, onClick }) {
   const classes = useStyles()
   const colors = [
     '#2d70ae',
@@ -21,23 +21,22 @@ function AnswersButton({ answerNumber, answerAmount }) {
         xs={
           answerAmount % 2 !== 0 && answerAmount - 1 === answerNumber ? 12 : 6
         }>
-        <Box>
-          <Button
-            className={classes.hoverStyle}
-            variant="contained"
-            size="large"
-            fullWidth
-            sx={{
+        <Button
+          onClick={onClick}
+          className={classes.hoverStyle}
+          variant="contained"
+          size="large"
+          fullWidth
+          sx={{
+            backgroundColor: colors[answerNumber * 2],
+            borderRadius: '10px',
+            borderBottom: `7px solid ${colors[answerNumber * 2 + 1]}`,
+            height: '150px',
+            ':hover': {
               backgroundColor: colors[answerNumber * 2],
-              borderRadius: '10px',
-              borderBottom: `7px solid ${colors[answerNumber * 2 + 1]}`,
-              height: '150px',
-              ':hover': {
-                backgroundColor: colors[answerNumber * 2],
-                opacity: 0.5,
-              },
-            }}></Button>
-        </Box>
+              opacity: 0.5,
+            },
+          }}></Button>
       </Grid>
     </>
   )

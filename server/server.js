@@ -44,7 +44,7 @@ app.use("/api/quests", questRouter);
 app.use("/api/game", gameRouter);
 app.use("/api/studentScore", studentScoreRouter);
 
-let quest;
+let quest = {};
 let students = [];
 
 const addStudent = (studentName, socketId) => {

@@ -28,7 +28,8 @@ function Quest({ quest }) {
   const openQuestCreator = e => {
     history(`/myQuests/${quest._id}`)
   }
-  const startGame = () => {
+
+  const startGame = async () => {
     let gameData = {
       ...quest,
       questId: quest._id,
@@ -36,7 +37,7 @@ function Quest({ quest }) {
       isLive: true,
       pin: String(Math.floor(Math.random() * 900000) + 100000),
     }
-    const activatedGame = dispatch(activateGame(gameData, history))
+    const activatedGame = await dispatch(activateGame(gameData, history))
     socket.emit('init-game', activatedGame)
   }
 
